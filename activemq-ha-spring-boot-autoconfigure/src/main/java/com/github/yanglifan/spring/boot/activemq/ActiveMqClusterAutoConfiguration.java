@@ -3,6 +3,7 @@ package com.github.yanglifan.spring.boot.activemq;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.Lifecycle;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,15 +22,27 @@ import java.util.List;
 @Configuration
 @ConditionalOnClass({ConnectionFactory.class, ActiveMQConnectionFactory.class})
 @ConditionalOnMissingBean(ConnectionFactory.class)
-public class ActiveMqHaAutoConfiguration {
-	@Bean
-	ConnectionFactory connectionFactory1() {
-		return new ActiveMQConnectionFactory("admin", "", "tcp://localhost:61616");
+@EnableConfigurationProperties(ActiveMqClusterProperties.class)
+public class ActiveMqClusterAutoConfiguration {
+	private final ActiveMqClusterProperties properties;
+
+	public ActiveMqClusterAutoConfiguration(ActiveMqClusterProperties properties) {
+		this.properties = properties;
 	}
 
 	@Bean
-	ConnectionFactory connectionFactory2() {
-		return new ActiveMQConnectionFactory("admin", "", "tcp://localhost:61616");
+	List<ConnectionFactory> connectionFactories() {
+		List<ConnectionFactory> connectionFactories = new ArrayList<>();
+
+		for (ActiveMqClusterProperties.Broker broker : properties.getBrokers()) {
+			ConnectionFactory cf = new ActiveMQConnectionFactory(
+					broker.getUsername(), broker.getPassword(), broker.getUrl()
+			);
+
+			connectionFactories.add(cf);
+		}
+
+		return connectionFactories;
 	}
 
 	@Bean
