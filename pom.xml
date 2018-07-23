@@ -55,6 +55,12 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+            <dependency>
+                <groupId>com.github.yanglifan.spring.boot</groupId>
+                <artifactId>activemq-ha-spring-boot-autoconfigure</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
