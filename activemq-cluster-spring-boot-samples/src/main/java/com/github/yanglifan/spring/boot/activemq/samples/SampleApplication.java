@@ -14,6 +14,12 @@ public class SampleApplication {
 
 	@JmsListener(destination = "foobar")
 	public void foobar(String message) {
-		System.out.println("foobar Q recv -> " + message);
+		System.out.println("foobar receive -> " + message);
+	}
+
+	@JmsListener(destination = "rollback")
+	public void rollback(String message) {
+		System.out.println("rollback receive -> " + message);
+		throw new RuntimeException("for rollback");
 	}
 }
