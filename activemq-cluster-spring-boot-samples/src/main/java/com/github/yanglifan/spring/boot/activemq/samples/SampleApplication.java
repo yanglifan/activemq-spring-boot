@@ -8,19 +8,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @SpringBootApplication
 public class SampleApplication {
-//	@Autowired
-//	private JmsTemplate jmsTemplate;
-//
-//	@Scheduled(fixedDelay = 1000)
-//	public void sendMessage() {
-//		try {
-//			jmsTemplate.convertAndSend("foobar", "haha");
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
-
-
 	public static void main(String[] args) {
 		SpringApplication.run(SampleApplication.class, args);
 	}
