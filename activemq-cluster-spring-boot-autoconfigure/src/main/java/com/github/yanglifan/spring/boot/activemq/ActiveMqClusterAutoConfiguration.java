@@ -24,11 +24,11 @@ import java.util.List;
 @AutoConfigureBefore(ActiveMQAutoConfiguration.class)
 @ConditionalOnClass({ConnectionFactory.class, ActiveMQConnectionFactory.class})
 @ConditionalOnMissingBean(ConnectionFactory.class)
-@EnableConfigurationProperties(ActiveMqClusterProperties.class)
+@EnableConfigurationProperties(ActiveMQProperties.class)
 public class ActiveMqClusterAutoConfiguration {
-	private final ActiveMqClusterProperties properties;
+	private final ActiveMQProperties properties;
 
-	public ActiveMqClusterAutoConfiguration(ActiveMqClusterProperties properties) {
+	public ActiveMqClusterAutoConfiguration(ActiveMQProperties properties) {
 		this.properties = properties;
 	}
 
@@ -37,15 +37,15 @@ public class ActiveMqClusterAutoConfiguration {
 	 */
 	@Bean
 	ConnectionFactory connectionFactory() {
-		ActiveMqClusterProperties.Broker broker = properties.getBrokers().get(0);
+		ActiveMQProperties.Broker broker = properties.getConsumer().getBrokers().get(0);
 		return new ActiveMQConnectionFactory(broker.getUsername(), broker.getPassword(), broker.getUrl());
 	}
 
 	@Bean
-	List<ConnectionFactory> connectionFactories() {
+	List<ConnectionFactory> consumerConnectionFactories() {
 		List<ConnectionFactory> connectionFactories = new ArrayList<>();
 
-		for (ActiveMqClusterProperties.Broker broker : properties.getBrokers()) {
+		for (ActiveMQProperties.Broker broker : properties.getConsumer().getBrokers()) {
 			ConnectionFactory cf = new ActiveMQConnectionFactory(
 					broker.getUsername(), broker.getPassword(), broker.getUrl()
 			);
@@ -63,7 +63,7 @@ public class ActiveMqClusterAutoConfiguration {
 			protected AbstractMessageListenerContainer createContainerInstance() {
 				MultiDcActiveMqListenerContainer multiDcActiveMqListenerContainer =
 						new MultiDcActiveMqListenerContainer();
-				multiDcActiveMqListenerContainer.setConnectionFactories(connectionFactories());
+				multiDcActiveMqListenerContainer.setConnectionFactories(consumerConnectionFactories());
 				return multiDcActiveMqListenerContainer;
 			}
 		};
