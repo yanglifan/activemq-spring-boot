@@ -1,0 +1,13 @@
+activemq-cluster:
+  brokers:
+    - broker:
+      url: tcp://localhost:61616
+      username: admin
+    - broker:
+      url: tcp://localhost:61616
+      username: admin
+
+spring:
+  activemq:
+    broker-url: tcp://localhost:61616
+    user: admin

@@ -12,10 +12,8 @@ import org.springframework.jms.config.AbstractJmsListenerContainerFactory;
 import org.springframework.jms.config.JmsListenerContainerFactory;
 import org.springframework.jms.listener.AbstractMessageListenerContainer;
 import org.springframework.jms.listener.DefaultMessageListenerContainer;
-import org.springframework.jms.listener.MessageListenerContainer;
 
 import javax.jms.ConnectionFactory;
-import javax.jms.JMSException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +21,7 @@ import java.util.List;
 @ConditionalOnClass({ConnectionFactory.class, ActiveMQConnectionFactory.class})
 @ConditionalOnMissingBean(ConnectionFactory.class)
 @EnableConfigurationProperties(ActiveMqClusterProperties.class)
+//@EnableAutoConfiguration(exclude = {ActiveMQAutoConfiguration.class})
 public class ActiveMqClusterAutoConfiguration {
 	private final ActiveMqClusterProperties properties;
 
@@ -46,13 +45,13 @@ public class ActiveMqClusterAutoConfiguration {
 	}
 
 	@Bean
-	JmsListenerContainerFactory jmsListenerContainerFactory(List<ConnectionFactory> connectionFactories) {
+	JmsListenerContainerFactory jmsListenerContainerFactory() {
 		return new AbstractJmsListenerContainerFactory() {
 			@Override
 			protected AbstractMessageListenerContainer createContainerInstance() {
 				MultiDcActiveMqListenerContainer multiDcActiveMqListenerContainer =
 						new MultiDcActiveMqListenerContainer();
-				multiDcActiveMqListenerContainer.setConnectionFactories(connectionFactories);
+				multiDcActiveMqListenerContainer.setConnectionFactories(connectionFactories());
 				return multiDcActiveMqListenerContainer;
 			}
 		};
@@ -60,21 +59,11 @@ public class ActiveMqClusterAutoConfiguration {
 }
 
 class MultiDcActiveMqListenerContainer extends DefaultMessageListenerContainer {
-	private List<ConnectionFactory> connectionFactories;
-	private List<MessageListenerContainer> messageListenerContainers = new ArrayList<>();
+	private List<DefaultMessageListenerContainer> messageListenerContainers = new ArrayList<>();
 
 	@Override
 	public void initialize() {
-		connectionFactories.forEach(cf -> {
-			DefaultMessageListenerContainer messageListenerContainer = new DefaultMessageListenerContainer();
-			messageListenerContainer.setConnectionFactory(cf);
-
-			// TODO Set others
-			messageListenerContainer.setDestinationName(getDestinationName());
-
-			messageListenerContainers.add(messageListenerContainer);
-			messageListenerContainer.initialize();
-		});
+		messageListenerContainers.forEach(DefaultMessageListenerContainer::initialize);
 	}
 
 	@Override
@@ -85,8 +74,9 @@ class MultiDcActiveMqListenerContainer extends DefaultMessageListenerContainer {
 	}
 
 	@Override
-	protected void doInitialize() throws JMSException {
-		super.doInitialize();
+	public void setDestinationName(String destinationName) {
+		super.setDestinationName(destinationName);
+		messageListenerContainers.forEach(mlc -> mlc.setDestinationName(destinationName));
 	}
 
 	@Override
@@ -94,7 +84,16 @@ class MultiDcActiveMqListenerContainer extends DefaultMessageListenerContainer {
 		messageListenerContainers.forEach(Lifecycle::start);
 	}
 
+	@Override
+	public void setMessageListener(Object messageListener) {
+		this.messageListenerContainers.forEach(mlc -> mlc.setMessageListener(messageListener));
+	}
+
 	void setConnectionFactories(List<ConnectionFactory> connectionFactories) {
-		this.connectionFactories = connectionFactories;
+		connectionFactories.forEach(cf -> {
+			DefaultMessageListenerContainer messageListenerContainer = new DefaultMessageListenerContainer();
+			messageListenerContainer.setConnectionFactory(cf);
+			messageListenerContainers.add(messageListenerContainer);
+		});
 	}
 }

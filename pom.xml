@@ -21,6 +21,7 @@
     <modules>
         <module>activemq-cluster-spring-boot-autoconfigure</module>
         <module>activemq-cluster-spring-boot-starter</module>
+        <module>activemq-cluster-spring-boot-samples</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -59,6 +60,12 @@
             <dependency>
                 <groupId>com.github.yanglifan.spring.boot</groupId>
                 <artifactId>activemq-cluster-spring-boot-autoconfigure</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.yanglifan.spring.boot</groupId>
+                <artifactId>activemq-cluster-spring-boot-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
