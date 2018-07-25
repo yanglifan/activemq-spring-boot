@@ -4,7 +4,6 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.jms.activemq.ActiveMQAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,14 +16,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
-@AutoConfigureBefore(ActiveMQAutoConfiguration.class)
+@AutoConfigureBefore(org.springframework.boot.autoconfigure.jms.activemq.ActiveMQAutoConfiguration.class)
 @ConditionalOnClass({ConnectionFactory.class, ActiveMQConnectionFactory.class})
 @ConditionalOnMissingBean(ConnectionFactory.class)
 @EnableConfigurationProperties(ActiveMQProperties.class)
-public class ActiveMqClusterAutoConfiguration {
+public class ActiveMQAutoConfiguration {
 	private final ActiveMQProperties properties;
 
-	public ActiveMqClusterAutoConfiguration(ActiveMQProperties properties) {
+	public ActiveMQAutoConfiguration(ActiveMQProperties properties) {
 		this.properties = properties;
 	}
 
