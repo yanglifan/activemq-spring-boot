@@ -20,6 +20,7 @@
         <dependency>
             <groupId>com.github.yanglifan.spring.boot</groupId>
             <artifactId>activemq-spring-boot-starter</artifactId>
+            <type>pom</type>
         </dependency>
     </dependencies>
 </project>
