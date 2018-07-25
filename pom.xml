@@ -16,18 +16,18 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.yanglifan.spring.boot</groupId>
-    <artifactId>activemq-cluster-spring-boot</artifactId>
+    <artifactId>activemq-spring-boot</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <modules>
-        <module>activemq-cluster-spring-boot-autoconfigure</module>
-        <module>activemq-cluster-spring-boot-starter</module>
-        <module>activemq-cluster-spring-boot-samples</module>
+        <module>activemq-spring-boot-autoconfigure</module>
+        <module>activemq-spring-boot-starter</module>
+        <module>activemq-spring-boot-samples</module>
     </modules>
     <packaging>pom</packaging>
 
     <name>ActiveMQ HA Spring Boot</name>
     <description>ActiveMQ HA Spring Boot</description>
-    <url>https://github.com/yanglifan/activemq-cluster-spring-boot</url>
+    <url>https://github.com/yanglifan/activemq-spring-boot</url>
 
     <properties>
         <spring-boot.version>2.0.3.RELEASE</spring-boot.version>
@@ -59,13 +59,13 @@
 
             <dependency>
                 <groupId>com.github.yanglifan.spring.boot</groupId>
-                <artifactId>activemq-cluster-spring-boot-autoconfigure</artifactId>
+                <artifactId>activemq-spring-boot-autoconfigure</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.github.yanglifan.spring.boot</groupId>
-                <artifactId>activemq-cluster-spring-boot-starter</artifactId>
+                <artifactId>activemq-spring-boot-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
