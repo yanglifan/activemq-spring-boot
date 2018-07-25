@@ -32,7 +32,7 @@ public class ActiveMQAutoConfiguration {
 	 */
 	@Bean
 	ConnectionFactory connectionFactory() {
-		ActiveMQProperties.Broker broker = properties.getConsumer().getBrokers().get(0);
+		ActiveMQProperties.Broker broker = properties.getProducer().getBroker();
 		return new ActiveMQConnectionFactory(broker.getUsername(), broker.getPassword(), broker.getUrl());
 	}
 

@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.util.ArrayList;
 import java.util.List;
 
-@ConfigurationProperties(prefix = "kit.activemq")
+@ConfigurationProperties(prefix = "activemq")
 public class ActiveMQProperties {
 	private Producer producer;
 

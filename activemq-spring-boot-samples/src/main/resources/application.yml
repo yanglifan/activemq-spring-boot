@@ -1,19 +1,13 @@
-kit:
-  activemq:
-    producer:
-      broker:
+activemq:
+  producer:
+    broker:
+      url: tcp://localhost:61616
+      username: admin
+  consumer:
+    brokers:
+      - broker:
         url: tcp://localhost:61616
         username: admin
-    consumer:
-      brokers:
-        - broker:
-          url: tcp://localhost:61616
-          username: admin
-        - broker:
-          url: tcp://localhost:61616
-          username: admin
-
-spring:
-  activemq:
-    broker-url: tcp://localhost:61616
-    user: admin
+      - broker:
+        url: tcp://localhost:61616
+        username: admin
